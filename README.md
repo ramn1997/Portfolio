@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive personal portfolio website built with React, TypeScript, and Framer Motion. This project showcases my skills, experience, and projects as a software engineer.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   **Modern Design**: Clean, dark-themed UI with smooth animations.
+-   **Responsive**: Fully optimized for desktop, tablet, and mobile devices.
+-   **Sections**:
+    -   **Hero**: Introduction and resume download/contact links.
+    -   **Experience**: Detailed work history timeline.
+    -   **Skills**: Categorized technical skills (Frontend, Backend, Tools).
+    -   **Projects**: Showcase of personal and professional projects with links.
+    -   **Contact**: Simple contact information and form.
+-   **Tech Stack**:
+    -   [React](https://react.dev/)
+    -   [TypeScript](https://www.typescriptlang.org/)
+    -   [Vite](https://vitejs.dev/)
+    -   [Framer Motion](https://www.framer.com/motion/) (Animations)
+    -   [React Icons](https://react-icons.github.io/react-icons/)
 
-## React Compiler
+## Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/ramn1997/Portfolio.git
+    cd Portfolio
+    ```
 
-## Expanding the ESLint configuration
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3.  **Run locally**:
+    ```bash
+    npm run dev
+    ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+4.  **Build for production**:
+    ```bash
+    npm run build
+    ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Deployment
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+This project is configured for deployment on GitHub Pages.
+
+To deploy:
+```bash
+npm run deploy
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The live site will be available at: [https://ramn1997.github.io/Portfolio](https://ramn1997.github.io/Portfolio)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## License
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+[MIT](LICENSE)
