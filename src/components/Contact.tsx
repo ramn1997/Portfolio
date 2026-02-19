@@ -1,8 +1,27 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 import { resume } from "../data/resume";
 
 export default function Contact() {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: ""
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const { name, email, message } = formData;
+        const subject = `Portfolio Contact from ${name}`;
+        const body = `Name: ${name}%0AEmail: ${email}%0A%0A${message}`;
+        window.location.href = `mailto:${resume.personalInfo.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     return (
         <section className="section bg-slate-900" style={{ padding: '6rem 0', background: 'var(--bg-dark)' }} id="contact">
             <div className="container mx-auto px-4 max-w-4xl" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
@@ -44,27 +63,39 @@ export default function Contact() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="space-y-4"
                         style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                        onSubmit={(e) => e.preventDefault()}
+                        onSubmit={handleSubmit}
                     >
                         <input
                             type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
                             placeholder="Name"
+                            required
                             className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
                             style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
                         />
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="Email"
+                            required
                             className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
                             style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
                         />
                         <textarea
                             rows={4}
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
                             placeholder="Message"
+                            required
                             className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
                             style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
                         ></textarea>
-                        <button className="btn btn-primary w-full justify-center" style={{ width: '100%', justifyContent: 'center' }}>
+                        <button type="submit" className="btn btn-primary w-full justify-center" style={{ width: '100%', justifyContent: 'center' }}>
                             Send Message
                         </button>
                     </motion.form>
