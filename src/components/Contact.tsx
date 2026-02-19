@@ -10,12 +10,39 @@ export default function Contact() {
         message: ""
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const { name, email, message } = formData;
-        const subject = `Portfolio Contact from ${name}`;
-        const body = `Name: ${name}%0AEmail: ${email}%0A%0A${message}`;
-        window.location.href = `mailto:${resume.personalInfo.email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+        setStatus("submitting");
+
+        try {
+            const response = await fetch("https://formsubmit.co/ajax/ram9707@outlook.com", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    _subject: `Portfolio Contact from ${formData.name}`,
+                    _template: "table",
+                    _captcha: "false"
+                })
+            });
+
+            if (response.ok) {
+                setStatus("success");
+                setFormData({ name: "", email: "", message: "" });
+                setTimeout(() => setStatus("idle"), 5000);
+            } else {
+                setStatus("error");
+            }
+        } catch (error) {
+            setStatus("error");
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -95,9 +122,20 @@ export default function Contact() {
                             className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
                             style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
                         ></textarea>
-                        <button type="submit" className="btn btn-primary w-full justify-center" style={{ width: '100%', justifyContent: 'center' }}>
-                            Send Message
+                        <button
+                            type="submit"
+                            disabled={status === "submitting"}
+                            className="btn btn-primary w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                            style={{ width: '100%', justifyContent: 'center' }}
+                        >
+                            {status === "submitting" ? "Sending..." : "Send Message"}
                         </button>
+                        {status === "success" && (
+                            <p className="text-green-400 text-center text-sm" style={{ color: '#4ade80', textAlign: 'center', marginTop: '0.5rem' }}>Message sent successfully!</p>
+                        )}
+                        {status === "error" && (
+                            <p className="text-red-400 text-center text-sm" style={{ color: '#f87171', textAlign: 'center', marginTop: '0.5rem' }}>Something went wrong. Please try again.</p>
+                        )}
                     </motion.form>
                 </div>
             </div>
