@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaFileAlt, FaDownload } from "react-icons/fa";
 import { resume } from "../data/resume";
 
-export default function Contact() {
+import { downloadResumePDF } from "../utils/downloadResume";
+
+interface ContactProps {
+    onOpenResume?: () => void;
+}
+
+
+export default function Contact({ onOpenResume }: ContactProps) {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         message: ""
     });
+
 
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
@@ -50,125 +58,210 @@ export default function Contact() {
     };
 
     return (
-        <section className="section bg-slate-900" style={{ padding: '6rem 0', background: 'var(--bg-dark)' }} id="contact">
-            <div className="container mx-auto px-4 max-w-4xl" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem' }}>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-16"
-                    style={{ textAlign: 'center', marginBottom: '4rem' }}
-                >
-                    <h2 className="text-4xl font-bold mb-6 gradient-text" style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1.5rem', backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))', WebkitBackgroundClip: 'text', color: 'transparent' }}>
-                        Get In Touch
-                    </h2>
-                    <p className="text-lg text-slate-400" style={{ fontSize: '1.125rem', color: 'var(--text-muted)' }}>
-                        I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!
-                    </p>
-                </motion.div>
-
-                <div className="grid md:grid-cols-2 gap-12" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="space-y-6"
-                        style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+        <section id="contact" style={{ paddingTop: '5rem', paddingBottom: '5rem', backgroundColor: 'var(--bg-page)', borderTop: '1px solid var(--border-light)' }}>
+            <div className="container">
+                {/* Header matching Image 4 */}
+                <div style={{ marginBottom: '3.5rem' }}>
+                    <motion.h2
+                        className="section-title"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
                     >
-                        <ContactItem icon={<FaEnvelope />} label="Email" value={resume.personalInfo.email} href={`mailto:${resume.personalInfo.email}`} />
-                        <ContactItem icon={<FaPhone />} label="Phone" value={resume.personalInfo.phone} href={`tel:${resume.personalInfo.phone.split(',')[0].trim()}`} />
-                        <ContactItem icon={<FaMapMarkerAlt />} label="Location" value={resume.personalInfo.location} />
-                        <div className="flex gap-4 mt-8" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                            <SocialButton icon={<FaGithub />} href={resume.personalInfo.github} />
-                            <SocialButton icon={<FaLinkedin />} href={resume.personalInfo.linkedin} />
-                        </div>
+                        Let's Connect.
+                    </motion.h2>
+
+                    <motion.p
+                        className="section-subtitle"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                    >
+                        I am currently open for new senior engineering opportunities and consulting roles. Feel free to reach out via the form below or connect through my professional network.
+                    </motion.p>
+                </div>
+
+                {/* 2 Column Layout: Left Form Card, Right Details & CV Box */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: '3rem', alignItems: 'flex-start' }}>
+
+                    {/* Left Side: White Form Box matching image 4 */}
+                    <motion.div
+                        className="minimal-card"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        style={{ padding: '2.5rem' }}
+                    >
+                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                                <div>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-heading)', display: 'block', marginBottom: '0.5rem' }}>
+                                        Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        placeholder="Ram Narayan"
+                                        required
+                                        className="custom-input"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-heading)', display: 'block', marginBottom: '0.5rem' }}>
+                                        Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="ram9707@outlook.com"
+                                        required
+                                        className="custom-input"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-heading)', display: 'block', marginBottom: '0.5rem' }}>
+                                    Message
+                                </label>
+                                <textarea
+                                    rows={5}
+                                    name="message"
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    placeholder="How can we collaborate?"
+                                    required
+                                    className="custom-input"
+                                    style={{ resize: 'vertical' }}
+                                ></textarea>
+                            </div>
+
+                            <div>
+                                <button
+                                    type="submit"
+                                    disabled={status === "submitting"}
+                                    style={{
+                                        border: 'none',
+                                        backgroundColor: 'transparent',
+                                        fontFamily: 'var(--font-serif)',
+                                        fontSize: '0.95rem',
+                                        color: 'var(--text-heading)',
+                                        cursor: 'pointer',
+                                        padding: 0
+                                    }}
+                                >
+                                    {status === "submitting" ? "Sending..." : "Send Message"}
+                                </button>
+                                {status === "success" && (
+                                    <p style={{ color: 'var(--accent-green)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Message sent successfully!</p>
+                                )}
+                                {status === "error" && (
+                                    <p style={{ color: '#ef4444', fontSize: '0.85rem', marginTop: '0.5rem' }}>Something went wrong. Please try again.</p>
+                                )}
+                            </div>
+                        </form>
                     </motion.div>
 
-                    <motion.form
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="space-y-4"
-                        style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-                        onSubmit={handleSubmit}
-                    >
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Name"
-                            required
-                            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
-                            style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
-                        />
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Email"
-                            required
-                            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
-                            style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
-                        />
-                        <textarea
-                            rows={4}
-                            name="message"
-                            value={formData.message}
-                            onChange={handleChange}
-                            placeholder="Message"
-                            required
-                            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
-                            style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem 1rem', color: 'var(--text-main)', fontSize: '1rem' }}
-                        ></textarea>
-                        <button
-                            type="submit"
-                            disabled={status === "submitting"}
-                            className="btn btn-primary w-full justify-center disabled:opacity-70 disabled:cursor-not-allowed"
-                            style={{ width: '100%', justifyContent: 'center' }}
-                        >
-                            {status === "submitting" ? "Sending..." : "Send Message"}
-                        </button>
-                        {status === "success" && (
-                            <p className="text-green-400 text-center text-sm" style={{ color: '#4ade80', textAlign: 'center', marginTop: '0.5rem' }}>Message sent successfully!</p>
-                        )}
-                        {status === "error" && (
-                            <p className="text-red-400 text-center text-sm" style={{ color: '#f87171', textAlign: 'center', marginTop: '0.5rem' }}>Something went wrong. Please try again.</p>
-                        )}
-                    </motion.form>
+                    {/* Right Side: Details & CV Card matching Image 4 */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                        <div>
+                            <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-heading)', marginBottom: '1.5rem' }}>
+                                Details
+                            </h3>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                    <FaEnvelope size={18} color="var(--text-muted)" style={{ marginTop: '0.2rem' }} />
+                                    <div>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>Email</span>
+                                        <a href={`mailto:${resume.personalInfo.email}`} className="serif-text" style={{ fontSize: '0.95rem', color: 'var(--text-heading)' }}>
+                                            {resume.personalInfo.email}
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                    <FaMapMarkerAlt size={18} color="var(--text-muted)" style={{ marginTop: '0.2rem' }} />
+                                    <div>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>Location</span>
+                                        <span className="serif-text" style={{ fontSize: '0.95rem', color: 'var(--text-heading)' }}>
+                                            {resume.personalInfo.location}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Curriculum Vitae Card */}
+                        <div style={{
+                            backgroundColor: '#eef2ff',
+                            border: '1px solid #e0e7ff',
+                            borderRadius: '0.75rem',
+                            padding: '2rem'
+                        }}>
+                            <FaFileAlt size={28} color="var(--text-heading)" style={{ marginBottom: '1.25rem' }} />
+                            <h4 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-heading)', marginBottom: '0.5rem' }}>
+                                Curriculum Vitae
+                            </h4>
+                            <p className="serif-text" style={{ fontSize: '0.9rem', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                                A comprehensive overview of my professional experience, enterprise projects, technical skills, and education.
+                            </p>
+
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                                <button
+                                    onClick={downloadResumePDF}
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700,
+                                        letterSpacing: '0.05em',
+                                        textTransform: 'uppercase',
+                                        color: '#ffffff',
+                                        backgroundColor: '#0f172a',
+                                        padding: '0.5rem 1rem',
+                                        borderRadius: '0.375rem',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem',
+                                        cursor: 'pointer',
+                                        border: 'none'
+                                    }}
+                                >
+                                    Download 1-Page PDF <FaDownload size={10} />
+                                </button>
+
+                                <button
+                                    onClick={onOpenResume}
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 700,
+                                        letterSpacing: '0.05em',
+                                        textTransform: 'uppercase',
+                                        color: 'var(--text-heading)',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem',
+                                        paddingBottom: '2px',
+                                        borderBottom: '1px solid var(--text-heading)',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Preview Resume
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-    );
-}
-
-function ContactItem({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href?: string }) {
-    const content = (
-        <div className="flex items-center gap-4 group" style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: href ? 'pointer' : 'default' }}>
-            <div className="p-3 bg-slate-800 rounded-lg text-indigo-400 group-hover:text-indigo-300 transition-colors" style={{ padding: '0.75rem', background: 'var(--bg-card)', borderRadius: '0.5rem', color: 'var(--primary)', fontSize: '1.25rem' }}>
-                {icon}
-            </div>
-            <div>
-                <p className="text-sm text-slate-500 font-medium" style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: '500' }}>{label}</p>
-                <p className="text-slate-200 font-medium group-hover:text-white transition-colors" style={{ color: 'var(--text-main)', fontWeight: '500' }}>{value}</p>
-            </div>
-        </div>
-    );
-
-    return href ? <a href={href} style={{ textDecoration: 'none' }}>{content}</a> : content;
-}
-
-function SocialButton({ icon, href }: { icon: React.ReactNode; href: string }) {
-    return (
-        <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 bg-slate-800 rounded-lg text-slate-400 hover:text-white hover:bg-indigo-500 transition-all duration-300 transform hover:-translate-y-1"
-            style={{ padding: '0.75rem', background: 'var(--bg-card)', borderRadius: '0.5rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', transition: 'all 0.3s' }}
-        >
-            {icon}
-        </a>
     );
 }

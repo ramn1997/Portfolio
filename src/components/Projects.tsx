@@ -1,58 +1,233 @@
-
 import { motion } from "framer-motion";
 import { resume } from "../data/resume";
-import { FaLaptopCode, FaExternalLinkAlt } from "react-icons/fa";
+import { FaCode, FaServer, FaTools } from "react-icons/fa";
 
 export default function Projects() {
     return (
-        <section className="section bg-slate-100" style={{ padding: '6rem 0', background: 'var(--bg-dark)' }} id="projects">
+        <section id="projects" style={{ paddingTop: '5rem', paddingBottom: '5rem', backgroundColor: 'var(--bg-page)', borderTop: '1px solid var(--border-light)' }}>
             <div className="container">
-                <motion.h2
-                    className="text-4xl font-bold mb-12 text-center"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '3rem', textAlign: 'center', color: 'var(--text-main)' }}
-                >
-                    <span className="gradient-text" style={{ backgroundClip: 'text', WebkitBackgroundClip: 'text', color: 'transparent', backgroundImage: 'linear-gradient(to right, var(--primary), var(--secondary))' }}>Projects</span>
-                </motion.h2>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-                    {resume.projects.map((project, index) => (
-                        <motion.div
-                            key={index}
-                            className="card h-full flex flex-col"
-                            whileHover={{ y: -10 }}
-                            style={{ background: 'var(--bg-card)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', display: 'flex', flexDirection: 'column' }}
+                {/* 1. PERSONAL & OPEN-SOURCE PROJECTS (Clean Display: Title, Description, Tech Stack Only) */}
+                <div style={{ marginBottom: '4rem' }}>
+                    <div style={{ marginBottom: '2.5rem' }}>
+                        <motion.h2
+                            className="section-title"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
                         >
-                            <div className="mb-4">
-                                <div className="flex justify-between items-start">
-                                    <div className="p-3 bg-indigo-500/10 rounded-lg text-indigo-400 mb-4 inline-block" style={{ padding: '0.75rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: '0.5rem', color: 'var(--primary)', marginBottom: '1rem', display: 'inline-block' }}>
-                                        <FaLaptopCode size={24} />
-                                    </div>
-                                    {project.link && (
-                                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" style={{ color: 'var(--text-muted)', transition: 'color 0.2s', fontSize: '1.25rem' }}>
-                                            <FaExternalLinkAlt />
-                                        </a>
-                                    )}
-                                </div>
+                            Personal & Open-Source Projects
+                        </motion.h2>
+                        <motion.p
+                            className="section-subtitle"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                        >
+                            Featured personal applications, microservices, and mobile projects developed with high commit activity.
+                        </motion.p>
+                    </div>
 
-                                <h3 className="text-xl font-bold mb-2 group-hover:text-indigo-400 transition-colors" style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--text-main)' }}>{project.title}</h3>
-                                <p className="text-sm text-slate-500 mb-4" style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>{project.role} • {project.duration}</p>
-                                <p className="text-slate-400 mb-6 flex-grow" style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', flexGrow: 1, lineHeight: 1.6 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.75rem' }}>
+                        {resume.personalProjects.map((project, index) => (
+                            <motion.div
+                                key={index}
+                                className="minimal-card"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: index * 0.05 }}
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: '100%',
+                                    border: '1px solid #e0e7ff',
+                                    backgroundColor: '#ffffff'
+                                }}
+                            >
+                                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#4338ca', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>
+                                    Personal Project
+                                </span>
+
+                                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-heading)', marginBottom: '0.5rem' }}>
+                                    {project.title}
+                                </h3>
+
+                                <p className="serif-text" style={{ fontSize: '0.95rem', color: 'var(--text-body)', lineHeight: 1.6, flexGrow: 1, marginBottom: '1.5rem' }}>
                                     {project.description}
                                 </p>
-                            </div>
 
-                            <div className="flex flex-wrap gap-2 mt-auto" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: 'auto' }}>
-                                {project.tech.map((tech, i) => (
-                                    <span key={i} className="text-xs font-mono text-indigo-300" style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--accent)' }}>
-                                        {tech}
-                                    </span>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: 'auto' }}>
+                                    {project.tech.map((t, i) => (
+                                        <span key={i} className="skill-tag">
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 2. ENTERPRISE PROJECTS SECTION */}
+                <div style={{ marginBottom: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-light)' }}>
+                    <div style={{ marginBottom: '2.5rem' }}>
+                        <motion.h2
+                            className="section-title"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            Enterprise Applications & Architecture
+                        </motion.h2>
+
+                        <motion.p
+                            className="section-subtitle"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                        >
+                            Proprietary enterprise solutions and cloud systems built for Fortune 500 clients.
+                        </motion.p>
+                    </div>
+
+                    {/* Enterprise Projects Grid */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.75rem' }}>
+                        {resume.projects.map((project, index) => {
+                            const isFeatured = (project as any).featured;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    className="minimal-card"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: index * 0.05 }}
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '100%',
+                                        position: 'relative',
+                                        border: isFeatured ? '2px solid #6366f1' : '1px solid var(--border-light)',
+                                        boxShadow: isFeatured ? '0 10px 30px -10px rgba(99, 102, 241, 0.18)' : 'none',
+                                        backgroundColor: isFeatured ? '#fafaff' : '#ffffff'
+                                    }}
+                                >
+                                    {isFeatured && (project as any).badge && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '-12px',
+                                            right: '16px',
+                                            backgroundColor: '#4f46e5',
+                                            color: '#ffffff',
+                                            fontSize: '0.68rem',
+                                            fontWeight: 700,
+                                            padding: '0.2rem 0.6rem',
+                                            borderRadius: '12px',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.05em',
+                                            boxShadow: '0 2px 8px rgba(79, 70, 229, 0.3)'
+                                        }}>
+                                            ★ {(project as any).badge}
+                                        </div>
+                                    )}
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', marginTop: isFeatured ? '0.25rem' : '0' }}>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: isFeatured ? '#4338ca' : 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            {project.role}
+                                        </span>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+                                            {project.duration}
+                                        </span>
+                                    </div>
+
+                                    <h3 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-heading)', marginBottom: '0.5rem' }}>
+                                        {project.title}
+                                    </h3>
+
+                                    <p className="serif-text" style={{ fontSize: '0.95rem', color: 'var(--text-body)', lineHeight: 1.6, flexGrow: 1, marginBottom: '1.25rem' }}>
+                                        {project.description}
+                                    </p>
+
+                                    {isFeatured && (project as any).metrics && (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.25rem' }}>
+                                            {(project as any).metrics.map((metric: string, mIdx: number) => (
+                                                <span key={mIdx} style={{
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: 600,
+                                                    color: '#3730a3',
+                                                    backgroundColor: '#e0e7ff',
+                                                    padding: '0.2rem 0.55rem',
+                                                    borderRadius: '4px',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '0.25rem'
+                                                }}>
+                                                    ✓ {metric}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: 'auto' }}>
+                                        {project.tech.map((t, i) => (
+                                            <span key={i} className="skill-tag">
+                                                {t}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* 3. Technical Stack Breakdown */}
+                <div>
+                    <h3 className="section-header-line">
+                        Technical Stack Breakdown
+                    </h3>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.75rem' }}>
+                        <div className="minimal-card">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                <FaCode size={20} color="#4338ca" />
+                                <h4 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Frontend Engineering</h4>
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                {resume.skills.frontend.map((skill, idx) => (
+                                    <span key={idx} className="skill-tag">{skill}</span>
                                 ))}
                             </div>
-                        </motion.div>
-                    ))}
+                        </div>
+
+                        <div className="minimal-card">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                <FaServer size={20} color="#4338ca" />
+                                <h4 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Backend & Services</h4>
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                {resume.skills.backend.map((skill, idx) => (
+                                    <span key={idx} className="skill-tag">{skill}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="minimal-card">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                                <FaTools size={20} color="#4338ca" />
+                                <h4 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Database & Cloud</h4>
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                {[...resume.skills.database, ...resume.skills.cloudAndTools].slice(0, 10).map((skill, idx) => (
+                                    <span key={idx} className="skill-tag">{skill}</span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
